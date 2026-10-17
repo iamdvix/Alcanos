@@ -1,0 +1,54 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: Arial, Helvetica, sans-serif;
+  --color-ink: #1f1b2e;
+  --color-mana: #7c3aed;
+  --color-slime: #16a34a;
+  --color-aqua: #0891b2;
+  --color-blossom: #db2777;
+  --color-gold: #d97706;
+}
+
+/* El fondo blanco va solo en html: si el body tuviera fondo, taparía los desenfoques de color. */
+@layer base {
+  html { background: #ffffff; }
+  body { @apply font-sans text-ink; }
+}
+
+@layer components {
+  .card {
+    @apply border-4 border-ink bg-white/90 shadow-[6px_6px_0_0_#1f1b2e] backdrop-blur-sm;
+  }
+  .card-mana { @apply shadow-[6px_6px_0_0_#7c3aed]; }
+  .card-slime { @apply shadow-[6px_6px_0_0_#16a34a]; }
+  .card-aqua { @apply shadow-[6px_6px_0_0_#0891b2]; }
+  .card-blossom { @apply shadow-[6px_6px_0_0_#db2777]; }
+
+  .strip {
+    @apply flex items-center justify-between border-b-4 border-ink px-4 py-1.5 text-xs font-bold tracking-widest text-white uppercase;
+  }
+  .slot {
+    @apply border-4 border-ink bg-white shadow-[inset_4px_4px_0_0_rgba(31,27,46,0.15)];
+  }
+  .btn {
+    @apply inline-flex cursor-pointer items-center justify-center border-4 border-ink bg-white px-4 py-2 text-sm font-bold text-ink shadow-[4px_4px_0_0_#1f1b2e] transition-transform hover:-translate-x-0.5 hover:-translate-y-0.5 active:translate-x-0.5 active:translate-y-0.5 active:shadow-none disabled:cursor-not-allowed disabled:opacity-50;
+  }
+  .btn-mana { @apply bg-mana text-white; }
+  .btn-slime { @apply bg-slime text-white; }
+  .btn-aqua { @apply bg-aqua text-white; }
+  .btn-blossom { @apply bg-blossom text-white; }
+  .btn-gold { @apply bg-gold text-white; }
+  .btn-ink { @apply bg-ink text-white; }
+  .tag {
+    @apply inline-block border-2 border-ink bg-white px-2 py-0.5 text-xs font-bold;
+  }
+}
+
+/* Movimiento por pasos, como en un videojuego, y suave. */
+@keyframes bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+.bob { animation: bob 4s steps(4) infinite; }
+@media (prefers-reduced-motion: reduce) { .bob { animation: none; } }
