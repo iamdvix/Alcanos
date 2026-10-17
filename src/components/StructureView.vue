@@ -37,13 +37,20 @@ const geometry = computed(() => {
       bonds.push([b1, b2])
     }
   })
-  return { atoms, bonds }
+  const ys = atoms.map((a) => a.y)
+  const top = Math.min(...ys) - 48
+  const bottom = Math.max(...ys) + 56
+  return { atoms, bonds, top, height: bottom - top }
 })
 </script>
 
 <template>
   <div class="overflow-x-auto">
-    <svg :viewBox="`0 0 ${width} 270`" :width="width" height="270" class="mx-auto block" role="img" aria-label="Estructura del alcano">
+    <svg
+      :viewBox="`0 ${geometry.top} ${width} ${geometry.height}`"
+      :style="{ minWidth: Math.min(width, 440) + 'px', maxWidth: width + 'px' }"
+      class="mx-auto block h-auto w-full" role="img" aria-label="Estructura del alcano"
+    >
       <g stroke="#1f1b2e" stroke-width="5" stroke-linecap="square">
         <line v-for="(b, i) in geometry.bonds" :key="'b' + i" :x1="b[0].x" :y1="b[0].y" :x2="b[1].x" :y2="b[1].y" />
       </g>

@@ -7,6 +7,7 @@ import HomeView from './components/HomeView.vue'
 import InfoSection from './components/InfoSection.vue'
 import NameGame from './components/NameGame.vue'
 import BuildGame from './components/BuildGame.vue'
+import QuizGame from './components/QuizGame.vue'
 import { score } from './data/score.js'
 
 const views = [
@@ -14,6 +15,7 @@ const views = [
   { id: 'aprender', label: 'Aprender', comp: InfoSection, on: 'btn-mana' },
   { id: 'nombrar', label: 'Nombrar', comp: NameGame, on: 'btn-slime' },
   { id: 'construir', label: 'Construir', comp: BuildGame, on: 'btn-aqua' },
+  { id: 'quiz', label: 'Quiz', comp: QuizGame, on: 'btn-gold' },
 ]
 const view = ref('inicio')
 const current = () => views.find((v) => v.id === view.value).comp
@@ -29,7 +31,7 @@ function go(id) {
 
     <div class="relative z-10">
       <header class="sticky top-0 z-20 border-b-4 border-ink bg-white/85 backdrop-blur-md">
-        <div class="mx-auto flex max-w-5xl flex-wrap items-center gap-4 px-4 py-3">
+        <div class="mx-auto flex max-w-5xl flex-wrap items-center gap-x-4 gap-y-2 px-4 py-3">
           <button class="flex items-center gap-3 text-left" @click="go('inicio')">
             <span class="flex items-end gap-1">
               <PixelArt name="bottle" color="#7c3aed" :size="22" />
@@ -38,16 +40,18 @@ function go(id) {
             </span>
             <span class="text-lg font-bold">Alcanos</span>
           </button>
-          <nav class="flex flex-wrap gap-2">
-            <button v-for="v in views" :key="v.id" class="btn !px-3 !py-1" :class="view === v.id && v.on" @click="go(v.id)">
+          <nav class="order-last -mx-4 w-[calc(100%+2rem)] overflow-x-auto px-4 pb-2 md:order-none md:mx-0 md:w-auto md:overflow-visible md:px-0 md:pb-0">
+            <div class="flex w-max gap-2">
+            <button v-for="v in views" :key="v.id" class="btn shrink-0 !px-3 !py-1" :class="view === v.id && v.on" @click="go(v.id)">
               {{ v.label }}
             </button>
+            </div>
           </nav>
           <span class="tag ml-auto !bg-gold !text-white">Puntos: {{ score.points }}</span>
         </div>
       </header>
 
-      <main class="mx-auto max-w-5xl px-4 py-10">
+      <main class="mx-auto max-w-5xl px-4 py-6 sm:py-10">
         <component :is="current()" @go="go" />
       </main>
 

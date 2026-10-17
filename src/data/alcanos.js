@@ -6,31 +6,6 @@ const SUB = { m: 'metil', e: 'etil' }
 export const SUB_C = { m: 1, e: 2 } // carbonos por sustituyente
 
 // Una estructura se describe así: { n: carbonos de la cadena principal, subs: [{ p: posición (1..n), t: 'm' | 'e' }] }
-const s = (n, ...b) => ({ n, subs: b.map(([p, t]) => ({ p, t })) })
-
-export const LEVELS = {
-  facil: {
-    label: 'Nivel 1: cadenas lineales',
-    items: [1, 2, 3, 4, 5, 6, 7, 8].map((n) => s(n)),
-  },
-  medio: {
-    label: 'Nivel 2: una ramificación',
-    items: [
-      s(4, [2, 'm']), s(5, [2, 'm']), s(5, [3, 'm']), s(6, [2, 'm']), s(6, [3, 'm']),
-      s(7, [3, 'm']), s(7, [4, 'm']), s(8, [2, 'm']), s(5, [3, 'e']),
-    ],
-  },
-  dificil: {
-    label: 'Nivel 3: varias ramificaciones',
-    items: [
-      s(4, [2, 'm'], [2, 'm']), s(4, [2, 'm'], [3, 'm']), s(5, [2, 'm'], [4, 'm']),
-      s(5, [2, 'm'], [2, 'm']), s(5, [3, 'm'], [3, 'm']), s(5, [2, 'm'], [3, 'm']),
-      s(6, [2, 'm'], [5, 'm']), s(5, [2, 'm'], [3, 'e']), s(5, [3, 'm'], [3, 'e']),
-      s(5, [2, 'm'], [2, 'm'], [4, 'm']), s(5, [2, 'm'], [3, 'm'], [4, 'm']),
-      s(4, [2, 'm'], [2, 'm'], [3, 'm']),
-    ],
-  },
-}
 
 // ---------- Nomenclatura ----------
 export function compose(n, subs) {
@@ -91,7 +66,7 @@ export function distractors(spec) {
     pool.push(compose(n, subs.map((x, i) => (i === 0 ? { ...x, p: shifted } : x))))
     if (subs.length > 1) pool.push(compose(n, subs.slice(1)))
   }
-  [n + 1, n - 1, n + 2, n - 2, n + 3].forEach((k) => CHAIN[k] && pool.push(compose(k, [])))
+  [n + 1, n - 1, n + 2, n - 2, n + 3, n - 3].forEach((k) => CHAIN[k] && pool.push(compose(k, [])))
   const uniq = [...new Set(pool)].filter((x) => x && x !== right)
   return shuffle(uniq).slice(0, 3)
 }
@@ -108,9 +83,16 @@ export const shuffle = (a) => {
   return r
 }
 
+const bags = {}
 export function pickChallenge(level, prev) {
-  const items = LEVELS[level].items.filter((x) => x !== prev)
-  return items[Math.floor(Math.random() * items.length)]
+  if (!bags[level]?.length) bags[level] = shuffle(LEVELS[level].items)
+  let item = bags[level].pop()
+  if (item === prev && bags[level].length) {
+    const other = bags[level].pop()
+    bags[level].unshift(item)
+    item = other
+  }
+  return item
 }
 
 // ---------- Estructura como grafo (para validar lo construido) ----------
@@ -151,3 +133,91 @@ function canonical(adj) {
 }
 
 export const sameStructure = (a, b) => canonical(toAdj(a)) === canonical(toAdj(b))
+
+// ---------- Validación y generación de ejercicios ----------
+// Un ejercicio solo es válido si su cadena principal es la más larga y el nombre no es ambiguo.
+function substituentsOf(adj, path) {
+  const onPath = new Set(path)
+  const subs = []
+  for (let i = 0; i < path.length; i++) {
+    for (const nb of adj[path[i]]) {
+      if (onPath.has(nb)) continue
+      let size = 1
+      let prev = path[i]
+      let cur = nb
+      for (;;) {
+        const nxt = adj[cur].filter((x) => x !== prev)
+        if (nxt.length === 0) break
+        if (nxt.length > 1) return null
+        prev = cur
+        cur = nxt[0]
+        size++
+      }
+      if (size > 2) return null
+      subs.push({ p: i + 1, t: size === 1 ? 'm' : 'e' })
+    }
+  }
+  return subs
+}
+
+export function analyze(spec) {
+  const adj = toAdj(spec)
+  const N = adj.length
+  const bfs = (s) => {
+    const d = Array(N).fill(-1)
+    const par = Array(N).fill(-1)
+    d[s] = 0
+    const q = [s]
+    for (let i = 0; i < q.length; i++) for (const w of adj[q[i]]) if (d[w] < 0) { d[w] = d[q[i]] + 1; par[w] = q[i]; q.push(w) }
+    return { d, par }
+  }
+  const info = Array.from({ length: N }, (_, s) => bfs(s))
+  const diam = Math.max(...info.map((x) => Math.max(...x.d)))
+  if (diam + 1 !== spec.n) return null
+  const names = new Set()
+  for (let u = 0; u < N; u++) {
+    for (let v = u + 1; v < N; v++) {
+      if (info[u].d[v] !== diam) continue
+      const path = []
+      for (let x = v; x !== -1; x = info[u].par[x]) path.push(x)
+      const subs = substituentsOf(adj, path)
+      if (!subs) return null
+      names.add(iupacName({ n: path.length, subs }))
+    }
+  }
+  if (N === 1) return iupacName(spec)
+  return names.size === 1 ? [...names][0] : null
+}
+
+function generate(k, minN, maxN) {
+  const found = new Map()
+  const walk = (cands, start, cur, n) => {
+    if (cur.length === k) {
+      const counts = {}
+      cur.forEach((x) => (counts[x.p] = (counts[x.p] ?? 0) + 1))
+      if (Object.values(counts).some((c) => c > 2)) return
+      const spec = { n, subs: cur.map((x) => ({ ...x })) }
+      const name = analyze(spec)
+      if (name && !found.has(name)) found.set(name, spec)
+      return
+    }
+    for (let i = start; i < cands.length; i++) {
+      cur.push(cands[i])
+      walk(cands, i, cur, n)
+      cur.pop()
+    }
+  }
+  for (let n = minN; n <= maxN; n++) {
+    const cands = []
+    for (let p = 2; p <= n - 1; p++) ['m', 'e'].forEach((t) => cands.push({ p, t }))
+    walk(cands, 0, [], n)
+  }
+  return [...found.values()]
+}
+
+export const LEVELS = {
+  facil: { label: 'Nivel 1: lineales', items: Array.from({ length: 10 }, (_, i) => ({ n: i + 1, subs: [] })) },
+  medio: { label: 'Nivel 2: una ramificación', items: generate(1, 4, 10) },
+  dificil: { label: 'Nivel 3: dos ramificaciones', items: generate(2, 4, 9) },
+  experto: { label: 'Nivel 4: tres ramificaciones', items: generate(3, 4, 9) },
+}

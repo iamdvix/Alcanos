@@ -20,7 +20,7 @@ const fill = (ch) => (ch === 'L' || ch === 'D' ? props.color : FILL[ch])
 
 <template>
   <svg
-    :width="size" :height="(size * rows.length) / rows[0].length"
+    :width="size" style="max-width: 100%; height: auto"
     :viewBox="`0 0 ${rows[0].length} ${rows.length}`" shape-rendering="crispEdges" aria-hidden="true"
   >
     <template v-for="(c, i) in cells" :key="i">

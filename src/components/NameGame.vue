@@ -6,7 +6,7 @@ import { LEVELS, iupacName, distractors, explain, normalize, pickChallenge, shuf
 import { score } from '../data/score.js'
 
 const OPT = ['btn-mana', 'btn-aqua', 'btn-gold', 'btn-blossom']
-const LEVEL_BTN = { facil: 'btn-slime', medio: 'btn-aqua', dificil: 'btn-blossom' }
+const LEVEL_BTN = { facil: 'btn-slime', medio: 'btn-aqua', dificil: 'btn-blossom', experto: 'btn-mana' }
 const level = ref('facil')
 const mode = ref('opciones')
 const spec = ref(null)
@@ -69,8 +69,8 @@ next()
     </div>
 
     <div class="card card-slime mt-6">
-      <div class="strip bg-slime"><span>Reto</span><span>Racha {{ streak }}</span></div>
-      <div class="p-6 sm:p-8">
+      <div class="strip flex-wrap gap-2 bg-slime"><span>Reto</span><span>Racha {{ streak }}</span></div>
+      <div class="p-4 sm:p-8">
         <div class="flex gap-2">
           <button class="btn !py-1" :class="mode === 'opciones' && 'btn-mana'" @click="setMode('opciones')">Opciones</button>
           <button class="btn !py-1" :class="mode === 'escribir' && 'btn-mana'" @click="setMode('escribir')">Escribir</button>
@@ -79,7 +79,7 @@ next()
         <div class="slot mt-4 py-2"><StructureView :spec="spec" /></div>
 
         <div v-if="mode === 'opciones'" class="mt-4 grid gap-3 sm:grid-cols-2">
-          <button v-for="(o, i) in options" :key="o" class="btn !py-3 text-base" :class="[OPT[i], optionClass(o)]" :disabled="!!result" @click="submit(o)">
+          <button v-for="(o, i) in options" :key="o" class="btn !justify-start !py-3 text-left text-base break-words" :class="[OPT[i], optionClass(o)]" :disabled="!!result" @click="submit(o)">
             {{ o }}
           </button>
         </div>

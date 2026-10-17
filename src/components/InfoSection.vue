@@ -45,7 +45,7 @@ const example = { n: 5, subs: [{ p: 2, t: 'm' }, { p: 3, t: 'e' }] }
 
     <div class="card card-mana mt-6">
       <div class="strip bg-mana"><span>{{ tabs.find((t) => t.id === tab).label }}</span></div>
-      <div class="p-6 sm:p-8">
+      <div class="p-4 sm:p-8">
         <div v-if="tab === 'que'" class="space-y-5">
           <p class="text-lg">
             Los alcanos son hidrocarburos saturados: están formados solo por carbono e hidrógeno y todos sus enlaces son

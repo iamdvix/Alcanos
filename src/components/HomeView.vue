@@ -1,17 +1,21 @@
 <script setup>
 import PixelArt from './PixelArt.vue'
 import PixelBar from './PixelBar.vue'
+import { LEVELS } from '../data/alcanos.js'
+import { QUESTIONS } from '../data/quiz.js'
 defineEmits(['go'])
 
 const modules = [
   { id: 'aprender', n: '01', title: 'Grimorio', text: 'Aprende qué son los alcanos, su fórmula general, las reglas de nomenclatura y sus usos.', color: '#7c3aed', sprite: 'flask', strip: 'bg-mana', btn: 'btn-mana', shadow: 'card-mana' },
   { id: 'nombrar', n: '02', title: 'Pociones de nombres', text: 'Observa una estructura y escribe o elige el nombre IUPAC correcto.', color: '#16a34a', sprite: 'round', strip: 'bg-slime', btn: 'btn-slime', shadow: 'card-slime' },
   { id: 'construir', n: '03', title: 'Caldero de estructuras', text: 'Recibe un nombre y construye la molécula carbono por carbono.', color: '#0891b2', sprite: 'bottle', strip: 'bg-aqua', btn: 'btn-aqua', shadow: 'card-aqua' },
+  { id: 'quiz', n: '04', title: 'Quiz de teoría', text: 'Rondas de preguntas sobre fórmulas, propiedades, usos y nomenclatura.', color: '#d97706', sprite: 'gem', strip: 'bg-gold', btn: 'btn-gold', shadow: 'card-gold' },
 ]
+const total = Object.values(LEVELS).reduce((a, l) => a + l.items.length, 0) + QUESTIONS.length
 const stats = [
-  { v: '10', l: 'alcanos', c: 'bg-mana' },
-  { v: '3', l: 'niveles', c: 'bg-slime' },
-  { v: '2', l: 'juegos', c: 'bg-blossom' },
+  { v: total, l: 'ejercicios', c: 'bg-mana' },
+  { v: Object.keys(LEVELS).length, l: 'niveles', c: 'bg-slime' },
+  { v: 3, l: 'juegos', c: 'bg-blossom' },
 ]
 </script>
 
@@ -19,9 +23,9 @@ const stats = [
   <section>
     <div class="card card-mana">
       <div class="strip bg-ink"><span>Química orgánica</span><span>Nivel inicial</span></div>
-      <div class="grid gap-8 p-8 sm:p-10 md:grid-cols-5">
+      <div class="grid gap-8 p-5 sm:p-10 md:grid-cols-5">
         <div class="md:col-span-3">
-          <h1 class="text-4xl font-bold sm:text-6xl">Laboratorio de Alcanos</h1>
+          <h1 class="text-4xl leading-tight font-bold sm:text-6xl">Laboratorio de Alcanos</h1>
           <div class="mt-4"><PixelBar /></div>
           <p class="mt-5 text-lg text-ink/80">
             Mezcla carbonos e hidrógenos como un alquimista. Estudia los hidrocarburos saturados, nombra estructuras y
@@ -53,10 +57,10 @@ const stats = [
       </div>
     </div>
 
-    <div class="mt-10 grid gap-8 md:grid-cols-3">
+    <div class="mt-10 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
       <article v-for="m in modules" :key="m.id" class="card flex flex-col" :class="m.shadow">
         <div class="strip" :class="m.strip"><span>Módulo {{ m.n }}</span></div>
-        <div class="flex flex-1 flex-col p-6">
+        <div class="flex flex-1 flex-col p-5">
           <div class="slot flex h-24 w-24 items-center justify-center">
             <PixelArt :name="m.sprite" :color="m.color" :size="56" />
           </div>
