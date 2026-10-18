@@ -58,9 +58,9 @@ next()
 
 <template>
   <section>
-    <h1 class="text-3xl font-bold sm:text-4xl">Pociones de nombres</h1>
+    <h1 class="text-3xl font-bold sm:text-4xl">Nombrar estructuras</h1>
     <div class="mt-3"><PixelBar /></div>
-    <p class="mt-3 text-ink/80">Observa la estructura y encuentra su nombre IUPAC correcto.</p>
+    <p class="mt-3 text-ink/80">Cada estructura guarda un nombre. Busca el camino más largo, cuenta desde el lado correcto y descífralo.</p>
 
     <div class="mt-5 flex flex-wrap gap-3">
       <button v-for="(l, key) in LEVELS" :key="key" class="btn" :class="level === key && LEVEL_BTN[key]" @click="setLevel(key)">
@@ -93,7 +93,7 @@ next()
         </form>
 
         <div v-if="result" class="mt-5 border-4 border-ink p-4" :class="result.ok ? 'bg-slime/15' : 'bg-blossom/15'">
-          <p class="text-lg font-bold">{{ result.ok ? 'Correcto. La poción está lista.' : 'Respuesta incorrecta.' }}</p>
+          <p class="text-lg font-bold">{{ result.ok ? 'Correcto. Nombre descifrado.' : 'Respuesta incorrecta.' }}</p>
           <p class="mt-1">Nombre correcto: <strong>{{ right }}</strong></p>
           <p class="mt-1 text-ink/80">{{ explain(spec) }}</p>
           <button class="btn btn-ink mt-4" @click="next">Siguiente</button>

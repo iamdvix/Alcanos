@@ -56,7 +56,7 @@ start()
 
 <template>
   <section>
-    <h1 class="text-3xl font-bold sm:text-4xl">Quiz de teoría</h1>
+    <h1 class="text-3xl font-bold sm:text-4xl">Prueba del alquimista</h1>
     <div class="mt-3"><PixelBar /></div>
     <p class="mt-3 text-ink/80">Rondas de {{ ROUND }} preguntas tomadas de un banco de {{ QUESTIONS.length }}.</p>
 
@@ -86,7 +86,7 @@ start()
       <div v-else class="p-4 text-center sm:p-8">
         <p class="text-5xl font-bold sm:text-6xl">{{ hits }} / {{ ROUND }}</p>
         <p class="mt-3 text-lg text-ink/80">
-          {{ hits >= 9 ? 'Dominas los alcanos.' : hits >= 6 ? 'Muy bien, sigue practicando.' : 'Repasa el Grimorio y vuelve a intentarlo.' }}
+          {{ hits >= 9 ? 'Dominas los alcanos.' : hits >= 6 ? 'Muy bien, sigue practicando.' : 'Repasa el Códice y vuelve a intentarlo.' }}
         </p>
         <button class="btn btn-gold mt-5" @click="start">Nueva ronda</button>
       </div>

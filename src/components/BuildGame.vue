@@ -89,9 +89,9 @@ function check() {
 
 <template>
   <section>
-    <h1 class="text-3xl font-bold sm:text-4xl">Caldero de estructuras</h1>
+    <h1 class="text-3xl font-bold sm:text-4xl">Formar estructuras</h1>
     <div class="mt-3"><PixelBar /></div>
-    <p class="mt-3 text-ink/80">Construye la molécula que corresponde al nombre indicado.</p>
+    <p class="mt-3 text-ink/80">Te damos un nombre. Construye la molécula, carbono por carbono, y el laboratorio dirá si la fórmula es correcta.</p>
 
     <div class="mt-5 flex flex-wrap gap-3">
       <button v-for="(l, key) in LEVELS" :key="key" class="btn" :class="level === key && LEVEL_BTN[key]" @click="setLevel(key)">

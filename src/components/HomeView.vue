@@ -6,10 +6,10 @@ import { QUESTIONS } from '../data/quiz.js'
 defineEmits(['go'])
 
 const modules = [
-  { id: 'aprender', n: '01', title: 'Grimorio', text: 'Aprende qué son los alcanos, su fórmula general, las reglas de nomenclatura y sus usos.', color: '#7c3aed', sprite: 'flask', strip: 'bg-mana', btn: 'btn-mana', shadow: 'card-mana' },
-  { id: 'nombrar', n: '02', title: 'Pociones de nombres', text: 'Observa una estructura y escribe o elige el nombre IUPAC correcto.', color: '#16a34a', sprite: 'round', strip: 'bg-slime', btn: 'btn-slime', shadow: 'card-slime' },
-  { id: 'construir', n: '03', title: 'Caldero de estructuras', text: 'Recibe un nombre y construye la molécula carbono por carbono.', color: '#0891b2', sprite: 'bottle', strip: 'bg-aqua', btn: 'btn-aqua', shadow: 'card-aqua' },
-  { id: 'quiz', n: '04', title: 'Quiz de teoría', text: 'Rondas de preguntas sobre fórmulas, propiedades, usos y nomenclatura.', color: '#d97706', sprite: 'gem', strip: 'bg-gold', btn: 'btn-gold', shadow: 'card-gold' },
+  { id: 'aprender', n: '01', title: 'Códice del alquimista', text: 'La regla, el carácter, el fuego y el nombre: las pistas y las tablas para descifrarlas.', color: '#7c3aed', sprite: 'flask', strip: 'bg-mana', btn: 'btn-mana', shadow: 'card-mana' },
+  { id: 'nombrar', n: '02', title: 'Nombrar estructuras', text: 'Cada estructura guarda un nombre. Encuentra el camino más largo y descífralo.', color: '#16a34a', sprite: 'round', strip: 'bg-slime', btn: 'btn-slime', shadow: 'card-slime' },
+  { id: 'construir', n: '03', title: 'Formar estructuras', text: 'Te damos un nombre. Tú construyes la molécula, carbono por carbono.', color: '#0891b2', sprite: 'bottle', strip: 'bg-aqua', btn: 'btn-aqua', shadow: 'card-aqua' },
+  { id: 'quiz', n: '04', title: 'Prueba del alquimista', text: 'Diez preguntas al azar sobre fórmulas, propiedades, usos y nombres.', color: '#d97706', sprite: 'gem', strip: 'bg-gold', btn: 'btn-gold', shadow: 'card-gold' },
 ]
 const total = Object.values(LEVELS).reduce((a, l) => a + l.items.length, 0) + QUESTIONS.length
 const stats = [
@@ -22,18 +22,18 @@ const stats = [
 <template>
   <section>
     <div class="card card-mana">
-      <div class="strip bg-ink"><span>Química orgánica</span><span>Nivel inicial</span></div>
+      <div class="strip bg-ink"><span>El laboratorio</span><span>Solo carbono e hidrógeno</span></div>
       <div class="grid gap-8 p-5 sm:p-10 md:grid-cols-5">
         <div class="md:col-span-3">
-          <h1 class="text-4xl leading-tight font-bold sm:text-6xl">Laboratorio de Alcanos</h1>
+          <h1 class="text-4xl leading-tight font-bold sm:text-6xl">La fórmula del alquimista</h1>
           <div class="mt-4"><PixelBar /></div>
           <p class="mt-5 text-lg text-ink/80">
-            Mezcla carbonos e hidrógenos como un alquimista. Estudia los hidrocarburos saturados, nombra estructuras y
-            construye moléculas en un laboratorio inspirado en las pociones.
+            Dos elementos. Una sola regla. Una familia entera esperando que alguien la construya y le ponga nombre.
+            Aquí no hay fórmulas escritas: las escribes tú.
           </p>
           <div class="mt-6 flex flex-wrap gap-3">
-            <button class="btn btn-ink !px-7 !py-3 text-base" @click="$emit('go', 'aprender')">Comenzar</button>
-            <button class="btn btn-slime !px-7 !py-3 text-base" @click="$emit('go', 'nombrar')">Jugar ya</button>
+            <button class="btn btn-ink !px-7 !py-3 text-base" @click="$emit('go', 'construir')">Abrir la puerta</button>
+            <button class="btn btn-slime !px-7 !py-3 text-base" @click="$emit('go', 'aprender')">Ver el códice</button>
           </div>
           <div class="mt-7 flex flex-wrap gap-3">
             <span v-for="s in stats" :key="s.l" class="border-4 border-ink px-3 py-1 font-bold text-white shadow-[3px_3px_0_0_#1f1b2e]" :class="s.c">
@@ -59,7 +59,7 @@ const stats = [
 
     <div class="mt-10 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
       <article v-for="m in modules" :key="m.id" class="card flex flex-col" :class="m.shadow">
-        <div class="strip" :class="m.strip"><span>Módulo {{ m.n }}</span></div>
+        <div class="strip" :class="m.strip"><span>Estación {{ m.n }}</span></div>
         <div class="flex flex-1 flex-col p-5">
           <div class="slot flex h-24 w-24 items-center justify-center">
             <PixelArt :name="m.sprite" :color="m.color" :size="56" />

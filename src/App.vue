@@ -12,10 +12,10 @@ import { score } from './data/score.js'
 
 const views = [
   { id: 'inicio', label: 'Inicio', comp: HomeView, on: 'btn-ink' },
-  { id: 'aprender', label: 'Aprender', comp: InfoSection, on: 'btn-mana' },
+  { id: 'aprender', label: 'Códice', comp: InfoSection, on: 'btn-mana' },
   { id: 'nombrar', label: 'Nombrar', comp: NameGame, on: 'btn-slime' },
-  { id: 'construir', label: 'Construir', comp: BuildGame, on: 'btn-aqua' },
-  { id: 'quiz', label: 'Quiz', comp: QuizGame, on: 'btn-gold' },
+  { id: 'construir', label: 'Formar', comp: BuildGame, on: 'btn-aqua' },
+  { id: 'quiz', label: 'Prueba', comp: QuizGame, on: 'btn-gold' },
 ]
 const view = ref('inicio')
 const current = () => views.find((v) => v.id === view.value).comp
@@ -38,7 +38,7 @@ function go(id) {
               <PixelArt name="round" color="#16a34a" :size="22" />
               <PixelArt name="flask" color="#db2777" :size="22" />
             </span>
-            <span class="text-lg font-bold">Alcanos</span>
+            <span class="text-lg font-bold">La fórmula del alquimista</span>
           </button>
           <nav class="order-last -mx-4 w-[calc(100%+2rem)] overflow-x-auto px-4 pb-2 md:order-none md:mx-0 md:w-auto md:overflow-visible md:px-0 md:pb-0">
             <div class="flex w-max gap-2">
@@ -58,7 +58,7 @@ function go(id) {
       <footer class="mx-auto max-w-5xl px-4 pb-10">
         <div class="flex items-center gap-3">
           <PixelBar />
-          <span class="text-sm font-bold text-ink/60">Laboratorio de Alcanos &middot; C<sub>n</sub>H<sub>2n+2</sub></span>
+          <span class="text-sm font-bold text-ink/60">La fórmula del alquimista &middot; C<sub>n</sub>H<sub>2n+2</sub></span>
         </div>
       </footer>
     </div>

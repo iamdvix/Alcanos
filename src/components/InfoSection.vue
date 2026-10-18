@@ -6,10 +6,25 @@ import PixelBar from './PixelBar.vue'
 const tabs = [
   { id: 'que', label: 'Qué son', on: 'btn-mana' },
   { id: 'nomenclatura', label: 'Nomenclatura', on: 'btn-slime' },
+  { id: 'prefijos', label: 'Prefijos y grupos', on: 'btn-gold' },
   { id: 'tabla', label: 'Tabla de alcanos', on: 'btn-aqua' },
   { id: 'usos', label: 'Propiedades y usos', on: 'btn-blossom' },
 ]
 const tab = ref('que')
+
+// Tablas del códice: prefijos numéricos (1 a 20) y grupos alquilo.
+const prefijos = ['Met', 'Et', 'Prop', 'But', 'Pent', 'Hex', 'Hept', 'Oct', 'Non', 'Dec', 'Undec', 'Dodec', 'Tridec', 'Tetradec', 'Pentadec', 'Hexadec', 'Heptadec', 'Octadec', 'Nonadec', 'Eicos']
+const prefRows = Array.from({ length: 10 }, (_, i) => [
+  { name: prefijos[i], n: i + 1 },
+  { name: prefijos[i + 10], n: i + 11 },
+])
+const alquilos = [
+  { c: 1, h: 3, name: 'Metilo' },
+  { c: 2, h: 5, name: 'Etilo' },
+  { c: 3, h: 7, name: 'Propilo' },
+  { c: 4, h: 9, name: 'Butilo' },
+  { c: 5, h: 11, name: 'Pentilo' },
+]
 
 const names = ['Metano', 'Etano', 'Propano', 'Butano', 'Pentano', 'Hexano', 'Heptano', 'Octano', 'Nonano', 'Decano']
 const boiling = [-161.5, -88.6, -42.1, -0.5, 36.1, 68.7, 98.4, 125.7, 150.8, 174.1]
@@ -36,7 +51,7 @@ const example = { n: 5, subs: [{ p: 2, t: 'm' }, { p: 3, t: 'e' }] }
 
 <template>
   <section>
-    <h1 class="text-3xl font-bold sm:text-4xl">Grimorio de los alcanos</h1>
+    <h1 class="text-3xl font-bold sm:text-4xl">Códice del alquimista</h1>
     <div class="mt-3"><PixelBar /></div>
 
     <div class="mt-5 flex flex-wrap gap-3">
@@ -82,6 +97,49 @@ const example = { n: 5, subs: [{ p: 2, t: 'm' }, { p: 3, t: 'e' }] }
             <h3 class="font-bold">Ejemplo: 3-etil-2-metilpentano</h3>
             <StructureView :spec="example" show-numbers />
             <p class="text-ink/80">Cadena principal de 5 carbonos. El metilo está en C2 y el etilo en C3. Se ordena etil antes que metil.</p>
+          </div>
+        </div>
+
+        <div v-else-if="tab === 'prefijos'" class="space-y-6">
+          <p class="text-lg">
+            Cada prefijo cuenta cuántos carbonos tiene la cadena. Con la terminación -ano forma el nombre del alcano, y con
+            la terminación -ilo, el nombre del grupo que cuelga.
+          </p>
+          <div class="overflow-x-auto">
+            <table class="w-full min-w-[420px] text-left">
+              <thead>
+                <tr class="bg-ink text-white">
+                  <th class="py-2 pr-4 pl-3">Prefijo</th>
+                  <th class="py-2 pr-4">Carbonos</th>
+                  <th class="py-2 pr-4">Prefijo</th>
+                  <th class="py-2 pr-3">Carbonos</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="(r, i) in prefRows" :key="i" :class="i % 2 ? 'bg-mana/10' : 'bg-aqua/10'">
+                  <td class="py-2 pr-4 pl-3 font-bold">{{ r[0].name }}-</td>
+                  <td class="py-2 pr-4">{{ r[0].n }}</td>
+                  <td class="py-2 pr-4 font-bold">{{ r[1].name }}-</td>
+                  <td class="py-2 pr-3">{{ r[1].n }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full min-w-[320px] text-left">
+              <thead>
+                <tr class="bg-ink text-white">
+                  <th class="py-2 pr-4 pl-3">Grupo alquilo</th>
+                  <th class="py-2 pr-3">Nombre</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="(a, i) in alquilos" :key="a.name" :class="i % 2 ? 'bg-mana/10' : 'bg-aqua/10'">
+                  <td class="py-2 pr-4 pl-3">&minus;C<sub v-if="a.c > 1">{{ a.c }}</sub>H<sub>{{ a.h }}</sub></td>
+                  <td class="py-2 pr-3 font-bold">{{ a.name }}</td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
 
