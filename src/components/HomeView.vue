@@ -1,74 +1,64 @@
 <script setup>
 import PixelArt from './PixelArt.vue'
-import PixelBar from './PixelBar.vue'
+import AlchemyScene from './AlchemyScene.vue'
 import { LEVELS } from '../data/alcanos.js'
 import { QUESTIONS } from '../data/quiz.js'
 defineEmits(['go'])
 
-const modules = [
-  { id: 'aprender', n: '01', title: 'Códice del alquimista', text: 'La regla, el carácter, el fuego y el nombre: las pistas y las tablas para descifrarlas.', color: '#7c3aed', sprite: 'flask', strip: 'bg-mana', btn: 'btn-mana', shadow: 'card-mana' },
-  { id: 'nombrar', n: '02', title: 'Nombrar estructuras', text: 'Cada estructura guarda un nombre. Encuentra el camino más largo y descífralo.', color: '#16a34a', sprite: 'round', strip: 'bg-slime', btn: 'btn-slime', shadow: 'card-slime' },
-  { id: 'construir', n: '03', title: 'Formar estructuras', text: 'Te damos un nombre. Tú construyes la molécula, carbono por carbono.', color: '#0891b2', sprite: 'bottle', strip: 'bg-aqua', btn: 'btn-aqua', shadow: 'card-aqua' },
-  { id: 'quiz', n: '04', title: 'Prueba del alquimista', text: 'Diez preguntas al azar sobre fórmulas, propiedades, usos y nombres.', color: '#d97706', sprite: 'gem', strip: 'bg-gold', btn: 'btn-gold', shadow: 'card-gold' },
+const stations = [
+  { id: 'aprender', n: '01', eyebrow: 'LIBRO ENCANTADO', title: 'El códice', text: 'Abre el conocimiento prohibido: propiedades, nomenclatura, prefijos y tablas.', color: '#b68ae0', sprite: 'book', kind: 'mana', action: 'Abrir códice' },
+  { id: 'nombrar', n: '02', eyebrow: 'MESA DE CARTOGRAFÍA', title: 'Descifra el nombre', text: 'Observa las cadenas de carbono y descubre cómo se llama cada compuesto.', color: '#90c88d', sprite: 'scroll', kind: 'slime', action: 'Descifrar' },
+  { id: 'construir', n: '03', eyebrow: 'SOPORTE DE POCIONES', title: 'Crea la fórmula', text: 'Construye un alcano átomo por átomo y comprueba si dominaste la receta.', color: '#78c9c7', sprite: 'bottle', kind: 'aqua', action: 'Construir' },
+  { id: 'quiz', n: '04', eyebrow: 'PRUEBA DE EXPERIENCIA', title: 'Desafío final', text: 'Supera diez preguntas, reúne XP y demuestra tus habilidades de alquimista.', color: '#eac178', sprite: 'emerald', kind: 'gold', action: 'Aceptar reto' },
 ]
-const total = Object.values(LEVELS).reduce((a, l) => a + l.items.length, 0) + QUESTIONS.length
-const stats = [
-  { v: total, l: 'ejercicios', c: 'bg-mana' },
-  { v: Object.keys(LEVELS).length, l: 'niveles', c: 'bg-slime' },
-  { v: 3, l: 'juegos', c: 'bg-blossom' },
-]
+const challengeCount = Object.values(LEVELS).reduce((a, l) => a + l.items.length, 0) + QUESTIONS.length
 </script>
 
 <template>
-  <section>
-    <div class="card card-mana">
-      <div class="strip bg-ink"><span>El laboratorio</span><span>Solo carbono e hidrógeno</span></div>
-      <div class="grid gap-8 p-5 sm:p-10 md:grid-cols-5">
-        <div class="md:col-span-3">
-          <h1 class="text-4xl leading-tight font-bold sm:text-6xl">La fórmula del alquimista</h1>
-          <div class="mt-4"><PixelBar /></div>
-          <p class="mt-5 text-lg text-ink/80">
-            Dos elementos. Una sola regla. Una familia entera esperando que alguien la construya y le ponga nombre.
-            Aquí no hay fórmulas escritas: las escribes tú.
-          </p>
-          <div class="mt-6 flex flex-wrap gap-3">
-            <button class="btn btn-ink !px-7 !py-3 text-base" @click="$emit('go', 'construir')">Abrir la puerta</button>
-            <button class="btn btn-slime !px-7 !py-3 text-base" @click="$emit('go', 'aprender')">Ver el códice</button>
+  <section class="home-screen">
+    <div class="hero-world">
+      <div class="hero-upper"><span class="live-rune">✦</span> MUNDO: LA FÓRMULA DEL ALQUIMISTA <span class="hero-version">FERIA DE CIENCIA · 2026</span></div>
+      <div class="hero-body">
+        <div class="hero-copy">
+          <div class="mission-tag"><PixelArt name="book" color="#b78be5" :size="25" /> MISIÓN PRINCIPAL <span> / CAPÍTULO I</span></div>
+          <h1 class="hero-title"><span>LA FÓRMULA</span><span>DEL <em>ALQUIMISTA</em></span></h1>
+          <p class="hero-quote">«Hay una fórmula que nadie ve... y que todos usan».</p>
+          <p class="hero-intro">En las profundidades de un laboratorio olvidado, un aldeano guarda el secreto de los <strong>enlaces del carbono</strong>. Sigue las pistas, consulta el códice y construye tu propia fórmula.</p>
+          <div class="hero-actions">
+            <button class="mc-action action-green" @click="$emit('go', 'construir')"><PixelArt name="bottle" color="#84d7a9" :size="23" /> ENTRAR AL LABORATORIO <span aria-hidden="true">›</span></button>
+            <button class="mc-action action-secondary" @click="$emit('go', 'aprender')"><PixelArt name="book" color="#d8b1f1" :size="22" /> LEER EL CÓDICE</button>
           </div>
-          <div class="mt-7 flex flex-wrap gap-3">
-            <span v-for="s in stats" :key="s.l" class="border-4 border-ink px-3 py-1 font-bold text-white shadow-[3px_3px_0_0_#1f1b2e]" :class="s.c">
-              {{ s.v }} {{ s.l }}
-            </span>
-          </div>
+          <div class="hero-note"><span class="note-diamond">◆</span> Solo necesitas dos elementos: carbono e hidrógeno.</div>
         </div>
-
-        <!-- Estante de pociones -->
-        <div class="relative flex h-72 flex-col justify-end border-4 border-ink bg-aqua/15 md:col-span-2">
-          <div class="bob absolute top-4 left-5"><PixelArt name="sparkle" color="#7c3aed" :size="25" /></div>
-          <div class="bob absolute top-8 right-6" style="animation-delay: 1s"><PixelArt name="bubble" color="#db2777" :size="30" /></div>
-          <div class="bob absolute top-20 left-1/2" style="animation-delay: 2s"><PixelArt name="gem" color="#d97706" :size="28" /></div>
-          <div class="flex items-end justify-center gap-3 px-3">
-            <PixelArt name="flask" color="#7c3aed" :size="80" />
-            <PixelArt name="round" color="#16a34a" :size="104" />
-            <PixelArt name="bottle" color="#db2777" :size="76" />
-          </div>
-          <div class="border-t-4 border-ink bg-[#a86a35]"><div class="h-2 bg-[#c98a4b]"></div><div class="h-3"></div></div>
+        <div class="hero-art">
+          <AlchemyScene />
+          <div class="scene-caption"><span class="pixel-dot"></span> LABORATORIO SUBTERRÁNEO <span>·</span> ALDEANO CLÉRIGO</div>
         </div>
+      </div>
+      <div class="hero-status">
+        <span><PixelArt name="emerald" color="#6ac783" :size="17" /> {{ challengeCount }} DESAFÍOS</span>
+        <span><PixelArt name="diamond" color="#7bd1e1" :size="17" /> 4 NIVELES</span>
+        <span><PixelArt name="sparkle" color="#f5bd67" :size="17" /> 3 JUEGOS</span>
+        <span class="status-right">C<sub>n</sub>H<sub>2n+2</sub> <span>◈</span></span>
       </div>
     </div>
 
-    <div class="mt-10 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
-      <article v-for="m in modules" :key="m.id" class="card flex flex-col" :class="m.shadow">
-        <div class="strip" :class="m.strip"><span>Estación {{ m.n }}</span></div>
-        <div class="flex flex-1 flex-col p-5">
-          <div class="slot flex h-24 w-24 items-center justify-center">
-            <PixelArt :name="m.sprite" :color="m.color" :size="56" />
-          </div>
-          <h2 class="mt-4 text-xl font-bold">{{ m.title }}</h2>
-          <p class="mt-2 flex-1 text-ink/80">{{ m.text }}</p>
-          <button class="btn mt-5" :class="m.btn" @click="$emit('go', m.id)">Entrar</button>
+    <div class="mission-heading">
+      <div><div class="heading-eyebrow">SELECCIONA TU DESTINO</div><h2>CUATRO ESTACIONES. <span>UN SECRETO.</span></h2></div>
+      <span class="quest-counter">01 — 04 / EXPLORACIÓN</span>
+    </div>
+    <div class="station-grid">
+      <article v-for="s in stations" :key="s.id" class="station" :class="'station-' + s.kind">
+        <div class="station-top"><span>ESTACIÓN {{ s.n }}</span><span class="station-star">✦</span></div>
+        <div class="station-content">
+          <div class="station-icon"><div class="station-light"></div><PixelArt :name="s.sprite" :color="s.color" :size="75" /></div>
+          <div class="station-eyebrow">{{ s.eyebrow }}</div>
+          <h3>{{ s.title }}</h3>
+          <p>{{ s.text }}</p>
+          <button class="station-link" @click="$emit('go', s.id)">{{ s.action }} <span aria-hidden="true">➜</span></button>
         </div>
       </article>
     </div>
+    <div class="world-tip"><PixelArt name="torch" color="#f4bb62" :size="31" /><div><strong>CONSEJO DEL ALDEANO</strong><p>Empieza por el códice si es tu primera visita, o entra directamente al laboratorio para aprender mientras juegas.</p></div><span class="world-tip-end">✧ ✦ ✧</span></div>
   </section>
 </template>
